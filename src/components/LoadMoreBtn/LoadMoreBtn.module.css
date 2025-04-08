@@ -1,0 +1,29 @@
+.loadMoreBtn {
+    background-color: #ff6b6b;
+    color: #fff;
+    font-size: 18px;
+    padding: 15px 30px;
+    margin: 20px auto;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    display: block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.loadMoreBtn:hover {
+    background-color: #ff4e4e;
+    transform: scale(1.05);
+   
+}
+
+.loadMoreBtn:active {
+    transform: scale(1);
+    
+}
+
+.loadMoreBtn:focus {
+    outline: none;
+}

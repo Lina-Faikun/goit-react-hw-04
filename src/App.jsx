@@ -1,55 +1,77 @@
-import { useState, useEffect } from "react";
-import ContactForm from "./components/ContactForm/ContactForm";
-import ContactList from "./components/ContactList/ContactList";
-import SearchBox from "./components/SearchBox/SearchBox";
-import css from "./App.module.css";
+import React, { useState, useEffect } from 'react';
+import { fetchImages } from './services/pixabay-api';
+import SearchBar from './components/SearchBar/SearchBar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
+import Loader from './components/Loader/Loader';
+import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
+import ImageModal from './components/ImageModal/ImageModal';
+import toast, { Toaster } from 'react-hot-toast';
 
-const LOCAL_STORAGE_KEY = "contacts";
+function App() {
+  const [query, setQuery] = useState('');
+  const [images, setImages] = useState([]);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const savedContacts = localStorage.getItem(LOCAL_STORAGE_KEY);
-    return savedContacts ? JSON.parse(savedContacts) : [
-      { id: "id-1", name: "Rosie Simpson", number: "459-12-56" },
-      { id: "id-2", name: "Hermione Kline", number: "443-89-12" },
-      { id: "id-3", name: "Eden Clements", number: "645-17-79" },
-      { id: "id-4", name: "Annie Copeland", number: "227-91-26" },
-    ];
-  });
-
-  const [search, setSearch] = useState("");
-
-  // Збереження контактів у localStorage при зміні списку контактів
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+    if (!query) return;
 
-  // Додавання нового контакту
-  const handleAddContact = (name, number) => {
-    setContacts((prevContacts) => [
-      ...prevContacts,
-      { id: `id-${Date.now()}`, name, number },
-    ]);
+    const fetchData = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const data = await fetchImages(query, page);
+        if (data.hits.length === 0) {
+          toast.error('No images found!');
+        }
+        setImages(prev => (page === 1 ? data.hits : [...prev, ...data.hits]));
+      } catch (err) {
+        setError('Something went wrong!');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [query, page]);
+
+  const handleSearch = (searchQuery) => {
+    if (!searchQuery.trim()) {
+      toast.error('Please enter a search term!');
+      return;
+    }
+
+    
+    setQuery('');
+    setTimeout(() => {
+      setQuery(searchQuery);
+      setPage(1);
+      setImages([]);
+    }, 0);
   };
 
-  // Видалення контакту
-  const handleDeleteContact = (id) => {
-    setContacts((prevContacts) => prevContacts.filter((contact) => contact.id !== id));
-  };
-
-  // Фільтрація контактів
-  const filteredContacts = contacts.filter((contact) =>
-    contact.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleLoadMore = () => setPage(prev => prev + 1);
+  const handleImageClick = (image) => setSelectedImage(image);
+  const closeModal = () => setSelectedImage(null);
 
   return (
-    <div className={css.container}>
-      <h1>📖 Phonebook</h1>
-      <ContactForm onAddContact={handleAddContact} />
-      <SearchBox value={search} onChange={(e) => setSearch(e.target.value)} />
-      <ContactList contacts={filteredContacts} onDelete={handleDeleteContact} />
+    <div className="app-container">
+      <Toaster position="top-center" />
+      <SearchBar onSubmit={handleSearch} />
+      {error && <ErrorMessage message={error} />}
+      <ImageGallery images={images} onImageClick={handleImageClick} />
+      {isLoading && <Loader />}
+      {images.length > 0 && !isLoading && (
+        <LoadMoreBtn onClick={handleLoadMore} />
+      )}
+      {selectedImage && (
+        <ImageModal image={selectedImage} isOpen={true} onClose={closeModal} />
+      )}
     </div>
   );
-};
+}
 
 export default App;
