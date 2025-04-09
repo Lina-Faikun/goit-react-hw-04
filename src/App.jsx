@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { fetchImages } from './services/pixabay-api';
+import ParentComponent from './components/ParentComponent';
+import { fetchImages } from './services/unsplash-api'; 
 import SearchBar from './components/SearchBar/SearchBar';
 import ImageGallery from './components/ImageGallery/ImageGallery';
+
 import LoadMoreBtn from './components/LoadMoreBtn/LoadMoreBtn';
 import Loader from './components/Loader/Loader';
 import ErrorMessage from './components/ErrorMessage/ErrorMessage';
@@ -23,7 +25,7 @@ function App() {
       try {
         const data = await fetchImages(query, page);
         setImages((prevImages) =>
-          page === 1 ? data.hits : [...prevImages, ...data.hits]
+          page === 1 ? data.results : [...prevImages, ...data.results] 
         );
       } catch (err) {
         setError('Something went wrong!');

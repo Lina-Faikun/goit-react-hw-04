@@ -11,9 +11,16 @@ const ImageModal = ({ isOpen, onClose, image }) => {
       className={styles.modal}
       overlayClassName={styles.overlay}
     >
-      <img src={image?.urls?.regular} alt={image?.alt_description} />
-      <p>Автор: {image?.user?.name}</p>
-      <p>Лайків: {image?.likes}</p>
+      {image ? (
+        <>
+          <img src={image?.urls?.regular} alt={image?.alt_description} />
+          <p>Автор: {image?.user?.name}</p>
+          <p>Лайків: {image?.likes}</p>
+        </>
+      ) : (
+        <p>Зображення не доступне</p>
+      )}
+      <button onClick={onClose}>Закрити</button>
     </Modal>
   );
 };
