@@ -22,9 +22,9 @@ function App() {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
-
+      const perPage = page === 1 ? 40 : 20;
       try {
-        const data = await fetchImages(query, page);
+        const data = await fetchImages(query, page, perPage);
         setImages((prevImages) =>
           page === 1 ? data.results : [...prevImages, ...data.results] 
         );
@@ -53,7 +53,8 @@ function App() {
        <Toaster position="top-right" reverseOrder={false} />
       <SearchBar onSearch={handleSearch} />
       {error && <ErrorMessage message={error} />}
-      <ImageGallery images={images} />
+      <ParentComponent images={images} />
+
       {isLoading && <Loader />}
       {images.length > 0 && !isLoading && (
         <LoadMoreBtn onClick={handleLoadMore} />

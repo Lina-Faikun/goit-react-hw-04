@@ -20,7 +20,9 @@ const ImageModal = ({ isOpen, onClose, image }) => {
       ) : (
         <p>Зображення не доступне</p>
       )}
-      <button onClick={onClose}>Закрити</button>
+      
+      <button className={styles.closeButton} onClick={onClose}>Закрити</button>
+
     </Modal>
   );
 };

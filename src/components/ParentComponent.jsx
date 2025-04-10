@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import ImageGallery from './ImageGallery/ImageGallery'; 
+import ImageGallery from './ImageGallery/ImageGallery';
 import ImageModal from './ImageModal/ImageModal';     
 
 const ParentComponent = ({ images }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  
+ 
   const handleImageClick = (image) => {
     setSelectedImage(image);  
     setIsModalOpen(true);      
   };
 
-  
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedImage(null);
@@ -20,7 +20,8 @@ const ParentComponent = ({ images }) => {
 
   return (
     <div>
-      <h1>Галерея</h1>
+      
+      
       <ImageGallery images={images} onImageClick={handleImageClick} />
       
       <ImageModal
