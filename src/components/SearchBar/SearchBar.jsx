@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { toast } from 'react-hot-toast';
 import styles from './SearchBar.module.css';
 
 const SearchBar = ({ onSearch }) => {
@@ -9,6 +10,8 @@ const SearchBar = ({ onSearch }) => {
     if (input.trim()) {
       onSearch(input.trim());
       setInput('');
+    } else {
+      toast.error('Please enter a search term'); 
     }
   };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import ParentComponent from './components/ParentComponent';
 import { fetchImages } from './services/unsplash-api'; 
 import SearchBar from './components/SearchBar/SearchBar';
@@ -49,6 +50,7 @@ function App() {
 
   return (
     <div className="app-container">
+       <Toaster position="top-right" reverseOrder={false} />
       <SearchBar onSearch={handleSearch} />
       {error && <ErrorMessage message={error} />}
       <ImageGallery images={images} />

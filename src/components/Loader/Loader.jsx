@@ -1,4 +1,4 @@
-import React from 'react';
+  import React from 'react';
 import { CircleLoader } from 'react-spinners';
 import styles from './Loader.module.css';
 
@@ -9,5 +9,4 @@ const Loader = () => {
     </div>
   );
 };
-
 export default Loader;

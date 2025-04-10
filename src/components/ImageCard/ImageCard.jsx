@@ -10,11 +10,16 @@ const ImageCard = ({ image, onClick }) => {
     return <div>Image not available</div>;
   }
 
-  return (
-    <div className={styles.imageCard} onClick={onClick}>
-      <img src={imageUrl} alt={image.alt_description || 'Image'} />
-    </div>
-  );
+ return (
+  <div className={styles.imageCard}>
+    <img
+      src={imageUrl}
+      alt={image.alt_description || 'Image'}
+      onClick={onClick} 
+      className={styles.image}
+    />
+  </div>
+);
 };
 
 
